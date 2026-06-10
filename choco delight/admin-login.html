@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Choco Delight</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --brown-dark: #3E2723;
+            --brown: #4E342E;
+            --brown-mid: #6D4C41;
+            --brown-light: #8D6E63;
+            --gold: #D4AF37;
+            --gold-light: #E8C84A;
+            --cream: #FFF8E7;
+            --glass-bg: rgba(255, 248, 231, 0.1);
+            --glass-border: rgba(212, 175, 55, 0.2);
+            --text-primary: #FFF8E7;
+            --text-secondary: rgba(255, 248, 231, 0.65);
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brown-dark);
+            overflow: hidden;
+        }
+
+        /* Animated background layers */
+        .bg-layer {
+            position: fixed; inset: 0; z-index: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, #5D4037 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, #6D4C41 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, #4E342E 0%, transparent 50%),
+                var(--brown-dark);
+        }
+        .orb {
+            position: absolute; border-radius: 50%; opacity: 0.07;
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+        .orb:nth-child(1) { width: 350px; height: 350px; background: var(--gold); top: -120px; left: -80px; animation-duration: 18s; }
+        .orb:nth-child(2) { width: 220px; height: 220px; background: var(--cream); top: 55%; right: -70px; animation-delay: -5s; animation-duration: 22s; }
+        .orb:nth-child(3) { width: 170px; height: 170px; background: var(--gold); bottom: -60px; left: 35%; animation-delay: -10s; animation-duration: 16s; }
+        .orb:nth-child(4) { width: 120px; height: 120px; background: var(--cream); top: 25%; left: 55%; animation-delay: -3s; animation-duration: 24s; }
+        .orb:nth-child(5) { width: 280px; height: 280px; background: var(--brown-light); top: 8%; right: 15%; animation-delay: -7s; }
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -40px) scale(1.06); }
+            50% { transform: translate(-25px, 25px) scale(0.94); }
+            75% { transform: translate(35px, 30px) scale(1.03); }
+        }
+
+        /* Gold particles */
+        .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+        .dot {
+            position: absolute; width: 3px; height: 3px; background: var(--gold);
+            border-radius: 50%; opacity: 0; animation: sparkle 4s ease-in-out infinite;
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: translateY(0) scale(0); }
+            50% { opacity: 0.55; transform: translateY(-50px) scale(1); }
+        }
+
+        /* Login card */
+        .login-wrap {
+            position: relative; z-index: 10; width: 100%; max-width: 440px; padding: 20px;
+            animation: riseIn 0.7s ease-out both;
+        }
+        @keyframes riseIn {
+            from { opacity: 0; transform: translateY(36px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px; padding: 48px 40px;
+            box-shadow: 0 32px 64px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+        .brand { text-align: center; margin-bottom: 36px; }
+        .brand-icon {
+            width: 66px; height: 66px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            border-radius: 18px; display: inline-flex; align-items: center; justify-content: center;
+            font-size: 28px; color: var(--brown-dark); margin-bottom: 14px;
+            box-shadow: 0 8px 28px rgba(212,175,55,0.35);
+        }
+        .brand h1 {
+            font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700;
+            color: var(--text-primary); letter-spacing: 0.5px;
+        }
+        .brand p { color: var(--text-secondary); font-size: 14px; margin-top: 5px; }
+
+        .field { margin-bottom: 20px; }
+        .field label {
+            display: block; color: var(--text-secondary); font-size: 13px;
+            font-weight: 500; margin-bottom: 8px; letter-spacing: 0.3px;
+        }
+        .inp-wrap { position: relative; }
+        .inp-wrap .ic {
+            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+            color: var(--text-secondary); font-size: 14px; transition: color 0.3s; pointer-events: none;
+        }
+        .inp-wrap input {
+            width: 100%; padding: 14px 16px 14px 44px;
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; color: var(--text-primary);
+            font-family: 'Poppins', sans-serif; font-size: 14px;
+            transition: all 0.3s; outline: none;
+        }
+        .inp-wrap input::placeholder { color: rgba(255,248,231,0.3); }
+        .inp-wrap input:focus {
+            border-color: var(--gold); background: rgba(255,255,255,0.1);
+            box-shadow: 0 0 0 3px rgba(212,175,55,0.12);
+        }
+        .inp-wrap input:focus ~ .ic { color: var(--gold); }
+        .eye-btn {
+            position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; color: var(--text-secondary); cursor: pointer;
+            font-size: 14px; padding: 4px; transition: color 0.3s;
+        }
+        .eye-btn:hover { color: var(--gold); }
+
+        .opts {
+            display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px;
+        }
+        .chk-label {
+            display: flex; align-items: center; gap: 8px;
+            color: var(--text-secondary); font-size: 13px; cursor: pointer; user-select: none;
+        }
+        .chk-label input[type="checkbox"] {
+            appearance: none; width: 18px; height: 18px;
+            border: 1.5px solid rgba(255,255,255,0.2); border-radius: 5px;
+            background: rgba(255,255,255,0.06); cursor: pointer;
+            position: relative; transition: all 0.3s; flex-shrink: 0;
+        }
+        .chk-label input:checked { background: var(--gold); border-color: var(--gold); }
+        .chk-label input:checked::after {
+            content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+            font-size: 10px; color: var(--brown-dark);
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+        }
+        .fgt { color: var(--gold); font-size: 13px; text-decoration: none; transition: color 0.3s; }
+        .fgt:hover { color: var(--gold-light); }
+
+        .login-btn {
+            width: 100%; padding: 15px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            border: none; border-radius: 12px; color: var(--brown-dark);
+            font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden;
+        }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(212,175,55,0.4); }
+        .login-btn:active { transform: translateY(0); }
+        .login-btn.busy { pointer-events: none; opacity: 0.85; }
+        .login-btn .bt { transition: opacity 0.3s; }
+        .login-btn.busy .bt { opacity: 0; }
+        .login-btn .sp {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            width: 20px; height: 20px; border: 2.5px solid rgba(62,39,35,0.3);
+            border-top-color: var(--brown-dark); border-radius: 50%;
+            opacity: 0; transition: opacity 0.3s; animation: spin 0.6s linear infinite;
+        }
+        .login-btn.busy .sp { opacity: 1; }
+        @keyframes spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+        .err {
+            background: rgba(229,57,53,0.12); border: 1px solid rgba(229,57,53,0.25);
+            color: #FF8A80; padding: 12px 16px; border-radius: 10px;
+            font-size: 13px; margin-bottom: 20px; display: none;
+            align-items: center; gap: 8px; animation: shake 0.4s ease;
+        }
+        .err.on { display: flex; }
+        @keyframes shake {
+            0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}
+            40%{transform:translateX(8px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}
+        }
+        .back {
+            display: block; text-align: center; margin-top: 24px;
+            color: var(--text-secondary); font-size: 13px; text-decoration: none; transition: color 0.3s;
+        }
+        .back:hover { color: var(--gold); }
+        .back i { margin-right: 6px; }
+
+        @media(max-width:480px){
+            .card { padding: 36px 22px; border-radius: 20px; }
+            .brand h1 { font-size: 24px; }
+        }
+        @media(prefers-reduced-motion:reduce){
+            *,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important;}
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Animated background -->
+    <div class="bg-layer">
+        <div class="orb"></div><div class="orb"></div><div class="orb"></div>
+        <div class="orb"></div><div class="orb"></div>
+    </div>
+    <div class="particles" id="pts"></div>
+
+    <!-- Login card -->
+    <div class="login-wrap">
+        <div class="card">
+            <div class="brand">
+                <div class="brand-icon"><i class="fas fa-cookie-bite"></i></div>
+                <h1>Choco Delight</h1>
+                <p>Admin Control Panel</p>
+            </div>
+            <div class="err" id="errBox">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errTxt"></span>
+            </div>
+            <form id="loginForm" autocomplete="off">
+                <div class="field">
+                    <label for="user">Username</label>
+                    <div class="inp-wrap">
+                        <input type="text" id="user" placeholder="Enter your username" required>
+                        <i class="fas fa-user ic"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="pass">Password</label>
+                    <div class="inp-wrap">
+                        <input type="password" id="pass" placeholder="Enter your password" required>
+                        <i class="fas fa-lock ic"></i>
+                        <button type="button" class="eye-btn" id="eyeBtn" aria-label="Toggle password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="opts">
+                    <label class="chk-label">
+                        <input type="checkbox" id="rem">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="fgt">Forgot password?</a>
+                </div>
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <span class="bt">Sign In</span>
+                    <div class="sp"></div>
+                </button>
+            </form>
+            <a href="index.html" class="back"><i class="fas fa-arrow-left"></i>Back to Store</a>
+        </div>
+    </div>
+
+    <script>
+        /* Generate floating gold particles */
+        (function(){
+            const c = document.getElementById('pts');
+            for(let i = 0; i < 35; i++){
+                const d = document.createElement('div');
+                d.className = 'dot';
+                d.style.left = Math.random()*100+'%';
+                d.style.top = Math.random()*100+'%';
+                d.style.animationDelay = (Math.random()*4)+'s';
+                d.style.animationDuration = (3+Math.random()*3)+'s';
+                const s = 2+Math.random()*3; d.style.width = s+'px'; d.style.height = s+'px';
+                c.appendChild(d);
+            }
+        })();
+
+        /* Password toggle */
+        const eyeBtn = document.getElementById('eyeBtn');
+        const passInp = document.getElementById('pass');
+        eyeBtn.addEventListener('click', ()=>{
+            const t = passInp.type === 'password' ? 'text' : 'password';
+            passInp.type = t;
+            eyeBtn.querySelector('i').className = t==='password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+        });
+
+        /* Restore remembered username */
+        if(localStorage.getItem('chocoRem')==='1'){
+            document.getElementById('user').value = 'admin';
+            document.getElementById('rem').checked = true;
+        }
+
+        /* Login handler */
+        document.getElementById('loginForm').addEventListener('submit', function(e){
+            e.preventDefault();
+            const u = document.getElementById('user').value.trim();
+            const p = document.getElementById('pass').value.trim();
+            const errBox = document.getElementById('errBox');
+            const errTxt = document.getElementById('errTxt');
+            const btn = document.getElementById('loginBtn');
+            errBox.classList.remove('on');
+
+            if(!u || !p){
+                errTxt.textContent = 'Please fill in all fields';
+                errBox.classList.add('on'); return;
+            }
+
+            btn.classList.add('busy');
+            setTimeout(()=>{
+                if(u === 'admin' && p === 'admin123'){
+                    if(document.getElementById('rem').checked) localStorage.setItem('chocoRem','1');
+                    else localStorage.removeItem('chocoRem');
+                    sessionStorage.setItem('chocoAuth','1');
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    errTxt.textContent = 'Invalid username or password';
+                    errBox.classList.add('on');
+                    btn.classList.remove('busy');
+                }
+            }, 700);
+        });
+    </script>
+</body>
+</html>
